@@ -1,0 +1,324 @@
+# uncomment the next line if running in a notebook
+# %matplotlib inline
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import math
+%matplotlib inline
+
+
+# mass, spring constant, initial position and velocity
+m = 1
+k = 1
+x = 0
+v = 1
+
+# simulation time, timestep and time
+t_max = 100
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+
+# initialise empty lists to record trajectories
+x_list = []
+v_list = []
+x_ver = []
+v_ver = []
+# Euler integration
+for t in t_array:
+
+    # append current state to trajectories
+    x_list.append(x)
+    v_list.append(v)
+
+    # calculate new position and velocity
+    a = - k * x / m
+    x = x + dt * v 
+    v = v + dt * a
+plt.plot(t_array,x_list)
+plt.xlabel('$t$')
+plt.ylabel('$EULER DISPLACEMENT$')
+plt.show()    
+plt.plot(t_array,v_list)
+plt.xlabel('$t$')
+plt.ylabel('$EULER VELOCITY$')
+plt.show()
+# we need to reset values
+m = 1
+k = 1
+x = 0
+v = 1
+for t in t_array:
+  x_ver.append(x)
+  v_ver.append(v)
+  x_old = x - dt * v
+  x_cur = x
+  x = 2 * x_cur - x_old - (dt ** 2) * k * x_cur / m
+  v = (x - x_cur)/dt
+plt.plot(t_array,x_ver)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETDISPLACEMENT$')
+plt.show()  
+plt.plot(t_array, v_ver)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETVELOCITY$')
+plt.show()
+print("-------------------------------")
+print("EXPLANATION:")
+print("Euler method is inaccurate as it diverges for large values of dt and has an unstable algorithm, however verlet integrator is surprisingly very accurate since it is stable and does not diverge as it is not using v for x")
+print("---------------------------------")
+print("---------------------------------")
+print("---------------------------------")
+print("let's try different dt")
+print("let dt=1")
+t_max = 1000
+dt = 1
+t_array = np.arange(0, t_max, dt)
+m = 1
+k = 1
+x = 0
+v = 1
+x_ver_1=[]
+v_ver_1=[]
+for t in t_array:
+  x_ver_1.append(x)
+  v_ver_1.append(v)
+  x_old = x - dt * v
+  x_cur = x
+  x = 2 * x_cur - x_old - (dt ** 2) * k * x_cur / m
+  v = (x - x_cur)/dt
+plt.plot(t_array,x_ver_1)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETDISPLACEMENT 1$')
+plt.show()  
+plt.plot(t_array, v_ver_1)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETVELOCITY 1$')
+plt.show()
+print("now dt=2")
+t_max = 1000
+dt = 2
+t_array = np.arange(0, t_max, dt)
+m = 1
+k = 1
+x = 0
+v = 1
+x_ver_2=[]
+v_ver_2=[]
+for t in t_array:
+  x_ver_2.append(x)
+  v_ver_2.append(v)
+  x_old = x - dt * v
+  x_cur = x
+  x = 2 * x_cur - x_old - (dt ** 2) * k * x_cur / m
+  v = (x - x_cur)/dt
+plt.plot(t_array,x_ver_2)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETDISPLACEMENT 2$')
+plt.show()  
+plt.plot(t_array, v_ver_2)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETVELOCITY 2$')
+plt.show()
+print("clearly verlet integrator was not stable at dt=2 QED")
+print("---------------------")
+print("---------------------")
+print("---------------------")
+print("now we try dt=1.001")
+t_max = 1000
+dt = 1.001
+t_array = np.arange(0, t_max, dt)
+m = 1
+k = 1
+x = 0
+v = 1
+x_ver_trial=[]
+v_ver_trial=[]
+for t in t_array:
+  x_ver_trial.append(x)
+  v_ver_trial.append(v)
+  x_old = x - dt * v
+  x_cur = x
+  x = 2 * x_cur - x_old - (dt ** 2) * k * x_cur / m
+  v = (x - x_cur)/dt
+plt.plot(t_array,x_ver_trial)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETDISPLACEMENT $')
+plt.show()  
+plt.plot(t_array, v_ver_trial)
+plt.xlabel('$t$')
+plt.ylabel('$VERLETVELOCITY $')
+plt.show()
+print("dt = ",dt)
+print("---------------")
+print("we can see that verlet integrator becomes poor and inaccurate at dt just exceeds 1.0 so therefore dt=1.0 must be the critical value in my opinion ")
+print("----------------------")
+print("for euler method let's try a very tiny number like dt=0.0001:")
+m = 1
+k = 1
+x = 0
+v = 1
+t_max = 100
+dt = 0.0001
+t_array = np.arange(0, t_max, dt)
+x_list_trial = []
+v_list_trial = []
+for t in t_array:
+    x_list_trial.append(x)
+    v_list_trial.append(v)
+    a= - k * x / m
+    x = x + dt * v 
+    v = v + dt * a
+plt.plot(t_array,x_list_trial)
+plt.xlabel('$t$')
+plt.ylabel('$EULER DISPLACEMENT$')
+plt.show()    
+plt.plot(t_array,v_list_trial)
+plt.xlabel('$t$')
+plt.ylabel('$EULER VELOCITY$')
+plt.show()
+print("now Euler is stable since dt is very small. Strange!")
+print("------------------------")
+print("assignment 1 is completed")
+print("assignment 2:")
+print("for straight down descention:")
+print("I take the initial position of the satellite to be 10000 km above the ground of Mars in all directions")
+# convert trajectory lists into arrays, so they can be sliced (useful for Assignment 2)
+x_array = np.array(x_list)
+v_array = np.array(v_list)
+R=3389.5*1000
+position= np.array([R+10000*10**3,R+10000*10**3,R+10000*10**3])
+velocity=np.zeros(3)
+M=6.42*10**23
+G=6.674*10**-11
+x=np.random.rand(3)
+def mag(x):
+  return (((x[0])**2)+((x[1])**2)+(x[2])**2)**0.5
+print("altitude vs time using euler:")  
+t_max = 18500
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+altitude_list=[]
+for t in t_array:
+  altitude=mag(position)-R
+  altitude_list.append(altitude)
+  a = (-1*(G * M)/(mag(position)**3)) *position
+  position = position + dt * velocity
+  velocity = velocity +dt * a
+plt.plot(t_array, altitude_list)
+plt.xlabel('$time$')
+plt.ylabel('$altitude$')
+plt.show()
+print("altitude vs time using verlet:")  
+t_max = 18500
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+position= np.array([R+10000*10**3,R+10000*10**3,R+10000*10**3])
+velocity=np.zeros(3)
+alt_list=[]
+for t in t_array:
+  alt=mag(position)-R
+  alt_list.append(alt)
+  position_old = position - dt * velocity
+  position_cur = position
+  a = (-1*(G * M)/(mag(position_cur)**3)) *position_cur
+  position = 2 * position_cur - position_old + (dt ** 2) * a  
+  velocity = (position - position_cur)/dt 
+plt.plot(t_array,alt_list)
+plt.xlabel('$time$')
+plt.ylabel('$altitude$')
+plt.show()
+print(" for the simplicity of the code, I have only used the Euler integrator for orbit analysis")
+print("now for geostationary circular orbit:")
+#we let the position vector to have zero x and z component in order to analyse the motion solely on the x-y plane and the altitude must be 16695.1 km for geostationary orbit
+position= np.array([0,R+16695.1*10**3,0])
+#using physics, this must be the magnitude of the velocity vector for circular motion
+velocity_factor = (G * M/ mag(position)) ** 0.5
+#therefore velocity vector must be velocity factor times a unit vector perpendicular to position vector. Here, we let that unit vector to be i
+velocity = np.array([velocity_factor, 0,0])
+#86400s is the time period for this initial altitude of 10000km
+t_max = 86400
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+xcomp_list=[]
+ycomp_list=[]
+for t in t_array:
+  xcomp=position[0]
+  ycomp=position[1]
+  xcomp_list.append(xcomp)
+  ycomp_list.append(ycomp)
+  a = (-1*(G * M)/(mag(position)**3)) *position
+  position = position + dt * velocity
+  velocity = velocity +dt * a
+plt.plot(xcomp_list,ycomp_list)
+plt.plot(0,0,'-xr')
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+plt.xlim(-25*10**6,25*10**6)
+plt.ylim(-25*10**6,25*10**6)
+plt.show()
+print("the cross point is the center of mars")
+print("-----------------------------")
+print("-----------------------------")
+print("now for geostationary elliptical orbit:")
+#we let the position vector to have zero y and z component in order to analyse the motion solely on the x-y plane and the altitude be 10000km
+position= np.array([R+10000*10**3,0,0])
+#using physics, the magnitude of the velocity must be a factor of circular speed, but less than escape velocity which is sqrt2 x circular speed.
+velocity_factor =1.15* (G * M/ mag(position)) ** 0.5
+#therefore velocity vector must be velocity factor times a unit vector perpendicular to position vector. Here, we let that unit vector to be j
+velocity = np.array([0,velocity_factor,0])
+#86400s is the time period for this initial perigee altitude of 10000km
+t_max = 86400
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+xcomp_list=[]
+ycomp_list=[]
+for t in t_array:
+  xcomp=position[0]
+  ycomp=position[1]
+  xcomp_list.append(xcomp)
+  ycomp_list.append(ycomp)
+  a = (-1*(G * M)/(mag(position)**3)) *position
+  position = position + dt * velocity
+  velocity = velocity +dt * a
+plt.plot(xcomp_list,ycomp_list)
+plt.plot(0,0,'-xr')
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+plt.xlim(-40*10**6,40*10**6)
+plt.ylim(-40*10**6,40*10**6)
+plt.show()
+print("the cross point is the center of mars")
+print("-----------------------------")
+print("-----------------------------")
+print("now for hyperbolic escape:")
+#we let the position vector to have zero y and z component in order to analyse the motion solely on the x-y plane and the altitude be 20000km
+position= np.array([R+20000*10**3,0,0])
+#using physics, the magnitude of velocity must  greater than escape velocity. Therefore I used the factor 1.5 which is bigger than sqrt2:
+velocity_factor =1.5*(G * M/ mag(position)) ** 0.5
+#therefore velocity vector must be velocity factor times a unit vector perpendicular to position vector. Here, we let that unit vector to be j
+velocity = np.array([0,velocity_factor,0])
+#time is not important here so we must using something small enough to shorten the running of the code
+t_max = 50000
+dt = 0.1
+t_array = np.arange(0, t_max, dt)
+xcomp_list=[]
+ycomp_list=[]
+for t in t_array:
+  xcomp=position[0]
+  ycomp=position[1]
+  xcomp_list.append(xcomp)
+  ycomp_list.append(ycomp)
+  a = (-1*(G * M)/(mag(position)**3)) *position
+  position = position + dt * velocity
+  velocity = velocity +dt * a
+plt.plot(xcomp_list,ycomp_list)
+plt.plot(0,0,'-xr')
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+plt.xlim(-70*10**6,70*10**6)
+plt.ylim(-70*10**6,70*10**6)
+plt.show()
+print("the cross point is the centre of mars")
+print("end of assignment 2")
+print("-----------------------------")
+print("-----------------------------")
